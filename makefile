@@ -4,8 +4,8 @@
 # .so library is final aim if no specific excutable file is needed.
 
 # SOURCE = BoardBuffer.cpp BoardsManager.cpp CombineData.cpp Configure.cpp DetectorManager.cpp Loop.cpp TPrimaryData.cpp TCombinedData.cpp FileManager.cpp TDetectorInfo.cpp mppc.cpp
-OBJ = FitSpectrum.o	Multi_Gauss.o
-HEADER = FitSpectrum.h	Multi_Gauss.h
+OBJ = FitSpectrum.o	Multi_Gauss.o	ChCali.o
+HEADER = FitSpectrum.h	Multi_Gauss.h	ChCali.h
 
 SHARELIB = libFitSpe.so
 SHARE = FitSpe

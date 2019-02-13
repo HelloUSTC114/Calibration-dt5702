@@ -7,6 +7,7 @@
 #include "TCanvas.h"
 #include "TH1F.h"
 #include "TROOT.h"
+#include "TObject.h"
 
 #include "Multi_Gauss.h"
 #include "Read_Spectrum.cpp"
@@ -67,6 +68,25 @@ private:
 
     bool fFitFlag = 0;
 
+};
+
+class FitPedestal
+{
+public:
+    FitPedestal(){h=NULL;fFitFlag=false;}
+    FitPedestal(TH1F* H):h(H){fFitFlag=false;}
+    ~FitPedestal(){if(f_temp) delete f_temp; f_temp = NULL;}
+
+    double FitPed();
+    bool Write(TDirectory* dir);
+
+    double GetPed();
+private:
+    TH1F *h;
+    double fPed;
+    TF1* f_temp;
+
+    bool fFitFlag;
 };
 
 #endif

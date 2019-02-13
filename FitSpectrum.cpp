@@ -306,3 +306,34 @@ double TFitResult::GetGain()
     gain = gain / (double)counter;
     return gain;
 }
+
+double FitPedestal::FitPed()
+{
+    if(!h)
+        return -1;
+    if(fFitFlag)
+        return fPed;
+    if(f_temp)  delete f_temp;
+
+    f_temp = new TF1("gaus", "gaus", 0, 4096);
+    h -> Fit(f_temp, "NQ", "", 0, 4096);
+    fPed = f_temp -> GetParameter(1);
+
+    cout << fPed << endl;
+    fFitFlag = true;
+    return fPed;
+}
+
+bool FitPedestal::Write(TDirectory *dir)
+{
+    if(!dir -> IsWritable())
+        return false;
+    h -> Write();
+    f_temp -> Write();
+    return true;
+}
+
+double FitPedestal::GetPed()
+{
+    return FitPed();
+}
