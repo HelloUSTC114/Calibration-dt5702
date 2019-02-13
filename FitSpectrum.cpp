@@ -283,3 +283,26 @@ void TFitResult::Print()
         cout << endl; 
     }
 }
+
+double TFitResult::GetGain()
+{
+    double average = 0;
+    for(int i = 0; i < fPeakNum-1; i++)
+    {
+        average += fArrDev[i];
+    }
+    average = average / (double)(fPeakNum-1);
+
+    double gain = 0;
+    int counter = 0;
+    for(int i = 0; i < fPeakNum-1; i++)
+    {
+        if(i == 0)   continue;
+        if(TMath::Abs(fArrDev[i]-average)/average > 0.3)
+            continue;
+        gain += fArrDev[i];
+        counter++;
+    }
+    gain = gain / (double)counter;
+    return gain;
+}

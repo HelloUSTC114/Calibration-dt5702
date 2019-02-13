@@ -26,6 +26,8 @@ public:
     bool Reset(FitSpectrum&);
     void Print();
     void Refresh(FitSpectrum&);
+
+    double GetGain();
 private:
     Int_t fPeakNum;   
     Double_t *fArrPeak;   //[fPeakNum]
