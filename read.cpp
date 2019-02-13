@@ -1,3 +1,9 @@
+#include "TTree.h"
+#include "TH1I.h"
+#include "TFile.h"
+#include "TBranch.h"
+#include <string>
+using namespace std;
 
 char* to_char(string s)
 {
