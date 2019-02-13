@@ -16,7 +16,7 @@ LINKDEF = LinkDef.h
 Excutable = test
 
 
-$(SHARELIB): $(OBJ) TestDict.cxx
+$(SHARELIB): $(OBJ) $(HEADER) TestDict.cxx
 	`root-config --cxx`	-fPIC	-shared	-o	$@	$(OBJ)	`root-config --cflags --libs` -lSpectrum
 
 %.o: %.cpp %.h

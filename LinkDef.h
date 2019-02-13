@@ -1,6 +1,6 @@
 #ifndef LINKDEF_H
 #define LINKDEF_H
-#ifdef __ROOTCLING__
-// #pragma link C++ all class;
+#ifdef __CLING__
+#pragma link C++ class TFitResult;
 #endif
 #endif
