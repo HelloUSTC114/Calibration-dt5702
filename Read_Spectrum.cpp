@@ -7,7 +7,7 @@
 
 
 #include "TH1.h"
-#include "TH1I.h"
+#include "TH1F.h"
 #include "TFile.h"
 
 #include <cstdio>
@@ -19,15 +19,15 @@ using namespace std;
 
 
 
-TH1I* Read_Spectrum(TFile * File, int Channel)
+TH1F* Read_Spectrum(TFile * File, int Channel)
 {
-    TH1I * temp = NULL;
+    TH1F * temp = NULL;
     if(File)
     {
         string s = "Chch_";
         s += to_string(Channel);
         s += ";1";
-        temp = (TH1I *)File -> Get(s . c_str());
+        temp = (TH1F *)File -> Get(s . c_str());
     }
     else
     {
@@ -41,7 +41,7 @@ TH1I* Read_Spectrum(TFile * File, int Channel)
     return temp;
 }
 
-TH1I * Read_Spectrum(string File_Name, int Channel)
+TH1F * Read_Spectrum(string File_Name, int Channel)
 {
     auto file = new TFile(File_Name . c_str());
     auto temp = Read_Spectrum(file, Channel);

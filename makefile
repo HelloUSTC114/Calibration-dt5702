@@ -4,18 +4,20 @@
 # .so library is final aim if no specific excutable file is needed.
 
 # SOURCE = BoardBuffer.cpp BoardsManager.cpp CombineData.cpp Configure.cpp DetectorManager.cpp Loop.cpp TPrimaryData.cpp TCombinedData.cpp FileManager.cpp TDetectorInfo.cpp mppc.cpp
-OBJ = 
-HEADER = 
+OBJ = FitSpectrum.o	Multi_Gauss.o
+HEADER = FitSpectrum.h	Multi_Gauss.h
+
+SHARELIB = libFitSpe.so
+SHARE = FitSpe
+
+DICTCXX = TestDict.cxx
+LINKDEF = LinkDef.h
+
+Excutable = test
 
 
-# DICTCXX = TestDict.cxx
-# LINKDEF = LinkDef.h
-
-Excutable = 
-
-
-libFitSpe.so: $(OBJ) #TestDict.cxx
-	`root-config --cxx --cflags`	-fPIC	-shared	-o	$@	$(OBJ)	TestDict.cxx	`root-config --libs`
+$(SHARELIB): $(OBJ) TestDict.cxx
+	`root-config --cxx`	-fPIC	-shared	-o	$@	$(OBJ)	`root-config --cflags --libs` -lSpectrum
 
 %.o: %.cpp %.h
 	`root-config --cxx `	-o	$@	-c	$<	`root-config --cflags`	-fPIC
@@ -31,7 +33,7 @@ distclean:
 	rm *.so *.pcm *.o *.root *.pdf $(Excutable) *Dict*
 
 
-test:  test.cpp libFitSpe.so
-	`root-config --cxx `	-o	$@	$<	-L.	-lTest	`root-config --cflags --libs`
+test:  test.cpp $(SHARELIB)
+	`root-config --cxx `	-o	$@	$<	-L.	-l$(SHARE)	`root-config --cflags --libs`
 
 all: $(Excutable)

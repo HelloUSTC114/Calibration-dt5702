@@ -1,5 +1,5 @@
 #include "TTree.h"
-#include "TH1I.h"
+#include "TH1F.h"
 #include "TFile.h"
 #include "TBranch.h"
 #include <string>
@@ -44,11 +44,11 @@ void read(string Root_File_Prefix)
 
 
     int N1 = tree1 -> GetEntries();
-    TH1I *hg1[32];
+    TH1F *hg1[32];
     for(int i = 0; i < 32; i++)
     {
         string s_ch = (string)"ch_" + to_string(i);
-        auto h1 = new TH1I(to_char(((string)"Ch")+s_ch), to_char(((string)"Ch")+s_ch), 4096, 0, 4096);
+        auto h1 = new TH1F(to_char(((string)"Ch")+s_ch), to_char(((string)"Ch")+s_ch), 4096, 0, 4096);
         hg1[i] = h1;
 
     }

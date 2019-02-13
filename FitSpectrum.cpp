@@ -1,9 +1,9 @@
-
 #include "FitSpectrum.h"
 
-double First_Peak_Start_Point = 350;
-double First_Peak_Mean_Start_Limit = 350;
-double First_Peak_Mean_End_Limit = 500;
+double First_Peak_Start_Point = 50;
+double First_Peak_Mean_Start_Limit = 180;
+double First_Peak_Mean_End_Limit = 250;
+double Gain_Guess = 50;
 
 FitSpectrum::~FitSpectrum()
 {
@@ -26,15 +26,19 @@ bool FitSpectrum::Fit()
     sp = new TSpectrum();
     
     auto h_back = sp->Background(h);
-    auto h_copy = new TH1I(*h);
+    auto h_copy = new TH1F(*h);
 
     // Subtract background
     h->Add(h_back, -1);
     h->Draw();
 
+    auto c = new TCanvas("c1", "c1", 1);
+    c -> cd();
+
+
     // Define class Multi_Gauss
     Multi_Gauss multi_gauss(0);
-    TF1 *fit_fun_array[Peak_Num_Max];
+    TF1 *fit_fun_array[Peak_Num_Max]{0};
 
     // Start to fit
     for (int peak_index = 0; peak_index < Peak_Num; peak_index++)
@@ -79,21 +83,67 @@ bool FitSpectrum::Fit()
             }
 
             // Set Initial value of parameters.
-            fit_fun_array[peak_index]->SetParameter(3 * peak_index + 1, last_peak_mean + 120);
-            fit_fun_array[peak_index]->SetParLimits(3 * peak_index + 1, last_peak_mean, last_peak_mean + 160);
+            fit_fun_array[peak_index]->SetParameter(3 * peak_index + 1, last_peak_mean + Gain_Guess);
+            fit_fun_array[peak_index]->SetParLimits(3 * peak_index + 1, last_peak_mean, last_peak_mean + 40 + Gain_Guess);
             fit_fun_array[peak_index]->SetParameter(3 * peak_index + 2, 10);
             fit_fun_array[peak_index]->SetParLimits(3 * peak_index + 2, 5, 40);
 
             h->Fit(fit_fun_array[peak_index], "", "", start, end);
         }
     }
+
+    // Add fit function to background to get the final fit result.
+
+    h_back -> Add(fit_fun_array[Peak_Num - 1]);
+    h_back -> SetName("Fit_Histo");
+    h_back -> SetTitle("Fit Histo of Spectrum");
+    h_back -> Draw();
+
+    h_copy -> SetName("Original");
+    h_copy -> SetTitle("Original Histo");
+    h_copy -> Draw("same");
+
+    cout << "Mean" << "\t" << "Sigma" << "\t" << "Variation" << endl;
+    for(int i = 0; i < Peak_Num; i++)
+    {
+        auto fun_temp = fit_fun_array[Peak_Num - 1];
+        cout << fun_temp -> GetParameter(3 * i + 1) << "\t" << fun_temp -> GetParameter(3 * i + 2);
+        if(i == 0)
+        {
+            cout << endl;
+        }
+        else
+        {
+            cout << "\t" << fun_temp -> GetParameter(3 * i + 1) - fun_temp -> GetParameter(3 * i - 2) << endl;
+        }
+
+    }
+
+    c -> BuildLegend();
+    c -> SaveAs("test.pdf");
+    c -> SaveAs("test.root");
+
+    for(int i = 0; i < Peak_Num_Max; i++)
+    {
+        if(fit_fun_array[i])
+        {
+            delete fit_fun_array[i];
+            fit_fun_array[i] = NULL;
+        }
+    }
+    delete h_copy;
+    h_copy = NULL;
+    delete c;
+    c = NULL;
+
+    return true;
 }
 
 void Fit_Spectrum(string File_Name, int Channel, int Peak_Num)
 {
     // use function Read_Spectrum to read a histogram from file.
     auto h = Read_Spectrum(File_Name, Channel);
-    auto h_copy = new TH1I(*h);
+    auto h_copy = new TH1F(*h);
 
     // use TSpectrum to calculate background
     auto sp = new TSpectrum();
@@ -193,19 +243,4 @@ void Fit_Spectrum(string File_Name, int Channel, int Peak_Num)
 
     c -> BuildLegend();
 
-}
-
-
-
-
-
-
-void Fit_Spectrum_test(string File_Name, int Channel)
-{
-    auto h = Read_Spectrum(File_Name, Channel);
-    h -> Draw();
-
-    auto sp = new TSpectrum();
-    auto h_back = sp -> Background(h);
-    h_back -> Draw("same");
 }

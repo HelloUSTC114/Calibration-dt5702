@@ -4,7 +4,6 @@
 // This is a class aiming at constructing a TF1 with multiple peaks.
 class Multi_Gauss;
 
-const int Peak_Num_Max = 10;
 
 Multi_Gauss::Multi_Gauss(int n_peak)
 {
