@@ -11,25 +11,30 @@ using namespace std;
 
 int main()
 {
-    // auto file = new TFile("/home/john/Documents/Calibration-dt5702/Data/Calibration-SPE/Ch2.root");
-    // auto h = (TH1F*)file -> Get("h2;1");
-
     GetOneByOne HistManager;
-    auto h = HistManager.GetSPEHist(4);
-    cout << h << endl;
-    FitSpectrum fit(h,5);
-    fit.Fit();
-    
-    TFitResult result(fit);
-    result.Print();
-    cout << result.GetGain() << endl;
+    FitSpectrum fit_spe;
+    FitPedestal fit_ped;
+    TFitResult result;
 
-    // FitPedestal fit(h);
-    // fit.FitPed();
+    TADCInfo ADCInfo;
 
-    auto file1 = new TFile("Test.root", "recreate");
-    fit.Write(file1);
-    result.Write();
-    file1 -> Close();
+
+    for(int i = 2; i < 5; i++)
+    {
+        auto h = HistManager.GetSPEHist(i);
+        fit_spe.Reset(h, 5);
+        fit_spe.Fit();
+        result.Reset(fit_spe);
+        double gain = result.GetGain();
+
+        auto h_ped = HistManager.GetPedHist(i);
+        fit_ped.Reset(h_ped);
+        double ped = fit_ped.FitPed();
+
+        cout << ADCInfo.SetGain(i,gain) << endl;
+    }
+    auto file = new TFile("ADCInfo.root", "recreate");
+    ADCInfo.Write();
+    file -> Close();
 
 }

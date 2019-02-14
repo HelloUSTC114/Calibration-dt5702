@@ -49,10 +49,6 @@ bool FitSpectrum::Fit()
     // Subtract background
     h->Add(h_back, -1);
 
-    if(!c)
-    {
-        c = new TCanvas("c1", "c1", 1);
-    }
 
     // Define class MultiGauss
     MultiGauss MultiGauss(0);
@@ -77,7 +73,7 @@ bool FitSpectrum::Fit()
             // Set first Peak limits
             fit_fun_array[peak_index]->SetParLimits(1, First_Peak_Mean_Start_Limit, First_Peak_Mean_End_Limit);
             fit_fun_array[peak_index]->SetParameter(0, 60);
-            fit_fun_array[peak_index]->SetParameter(1, 300);
+            fit_fun_array[peak_index]->SetParameter(1, (First_Peak_Mean_Start_Limit+First_Peak_Mean_End_Limit)/2);
             fit_fun_array[peak_index]->SetParameter(2, 20);
 
             // Start Position should be given and fixed in further fit.
@@ -111,26 +107,31 @@ bool FitSpectrum::Fit()
     }
 
     // Add fit function to background to get the final fit result.
-    c -> cd();
     h->SetName("Sub_Back");
     h->SetTitle("Substrct background");
-    h->Draw();
 
     h_back -> Add(fit_fun_array[Peak_Num - 1]);
     h_back -> SetName("Fit_Histo");
     h_back -> SetTitle("Fit Histo of Spectrum");
-    h_back -> Draw();
 
     h_copy -> SetName("Original");
     h_copy -> SetTitle("Original Histo");
-    h_copy -> Draw("same");
-
-    cout << "Mean" << "\t" << "Sigma" << "\t" << "Variation" << endl;
-    c -> BuildLegend();
-    c -> SaveAs("test.pdf");
 
     fFitFlag = true;
     return true;
+}
+
+void FitSpectrum::Draw()
+{
+    if (!c){
+        c = new TCanvas("c1", "c1", 1);
+    }
+    c->cd();
+    h->Draw();
+    h_back->Draw();
+    h_copy->Draw("same");
+    c->BuildLegend();
+    c->SaveAs("Test.pdf");
 }
 
 void FitSpectrum::Reset(TH1F* h_reset, int PeakNum)
@@ -236,6 +237,7 @@ void TFitResult::Clear()
     fArrDev = 0;
     fPeakNum = 0;
 }
+
 bool TFitResult::Reset(FitSpectrum& Fit)
 {
     if(!Fit.fFitFlag)
@@ -255,6 +257,19 @@ bool TFitResult::Reset(FitSpectrum& Fit)
 void TFitResult::Refresh(FitSpectrum& Fit)
 {
     auto fun_temp = Fit.fit_fun_array[Fit.Peak_Num - 1];
+    if(!fun_temp)
+    {
+        for (int i = 0; i < fPeakNum; i++)
+        {
+            fArrPeak[i] = 0;
+            fArrSig[i] = 0;
+            if (i)
+            {
+                fArrDev[i - 1] = fArrPeak[i] - fArrPeak[i - 1];
+            }
+        }
+        return;
+    }
 
     for(int i = 0; i < fPeakNum; i++){
         fArrPeak[i] = fun_temp -> GetParameter(3 * i + 1);
@@ -314,12 +329,12 @@ double FitPedestal::FitPed()
     if(fFitFlag)
         return fPed;
     if(f_temp)  delete f_temp;
+    f_temp = NULL;
 
     f_temp = new TF1("gaus", "gaus", 0, 4096);
     h -> Fit(f_temp, "NQ", "", 0, 4096);
     fPed = f_temp -> GetParameter(1);
 
-    cout << fPed << endl;
     fFitFlag = true;
     return fPed;
 }
@@ -336,4 +351,21 @@ bool FitPedestal::Write(TDirectory *dir)
 double FitPedestal::GetPed()
 {
     return FitPed();
+}
+
+void FitPedestal::Clear()
+{
+    fPed = -1;
+    if(f_temp)
+    {
+        delete f_temp;
+        f_temp = NULL;
+    }
+    fFitFlag = false;
+}
+
+void FitPedestal::Reset(TH1F* H)
+{
+    Clear();
+    h = H;
 }

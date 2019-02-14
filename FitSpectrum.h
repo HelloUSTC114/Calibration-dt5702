@@ -53,6 +53,7 @@ public:
     bool Fit();
 
     void Print();
+    void Draw();
     bool Write(TDirectory *);
     
 
@@ -73,20 +74,22 @@ private:
 class FitPedestal
 {
 public:
-    FitPedestal(){h=NULL;fFitFlag=false;}
-    FitPedestal(TH1F* H):h(H){fFitFlag=false;}
-    ~FitPedestal(){if(f_temp) delete f_temp; f_temp = NULL;}
+    FitPedestal() = default;
+    FitPedestal(TH1F* H):h(H){}
+    ~FitPedestal(){Clear();}
 
+    void Reset(TH1F* h);
+    void Clear();
     double FitPed();
     bool Write(TDirectory* dir);
 
     double GetPed();
 private:
-    TH1F *h;
+    TH1F *h=NULL;
     double fPed;
-    TF1* f_temp;
+    TF1* f_temp=NULL;
 
-    bool fFitFlag;
+    bool fFitFlag=false;
 };
 
 #endif

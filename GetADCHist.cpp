@@ -23,7 +23,7 @@ string GetOneByOne::GetPedFileName(int ch)
 {
     char c[32];
     string temp = to_string(ch);
-    temp +=  "-Ped.root";
+    temp +=  "-ped.root";
     return temp;
 }
 
