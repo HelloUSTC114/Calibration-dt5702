@@ -1,11 +1,11 @@
-#include "Multi_Gauss.h"
+#include "MultiGauss.h"
 
 
 // This is a class aiming at constructing a TF1 with multiple peaks.
-class Multi_Gauss;
+class MultiGauss;
 
 
-Multi_Gauss::Multi_Gauss(int n_peak)
+MultiGauss::MultiGauss(int n_peak)
 {
     if(n_peak < 0)
     {
@@ -19,7 +19,7 @@ Multi_Gauss::Multi_Gauss(int n_peak)
 
 }
 
-void Multi_Gauss::SetNPeak(int n_peak)
+void MultiGauss::SetNPeak(int n_peak)
 {
     if(n_peak < 0)
     {
@@ -29,7 +29,7 @@ void Multi_Gauss::SetNPeak(int n_peak)
     fNPeak = (n_peak > Peak_Num_Max) ? Peak_Num_Max : n_peak;
 }
 
-double Multi_Gauss::operator()(double *x, double *par)
+double MultiGauss::operator()(double *x, double *par)
 {
     double y = 0;
     double Gauss_Par[Peak_Num_Max][3]{0};
@@ -44,7 +44,7 @@ double Multi_Gauss::operator()(double *x, double *par)
     return y;
 }
 
-int Multi_Gauss::GetNPeak()
+int MultiGauss::GetNPeak()
 {
     return fNPeak;
 }

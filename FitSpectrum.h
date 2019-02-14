@@ -9,7 +9,7 @@
 #include "TROOT.h"
 #include "TObject.h"
 
-#include "Multi_Gauss.h"
+#include "MultiGauss.h"
 // #include "Read_Spectrum.cpp"
 using namespace std;
 

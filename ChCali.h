@@ -1,6 +1,7 @@
 #ifndef CHCALI_H
 #define CHCALI_H
 
+#include "iostream"
 #include "TObject.h"
 
 class TChannelInfo;

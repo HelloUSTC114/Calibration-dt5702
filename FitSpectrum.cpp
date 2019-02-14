@@ -54,17 +54,17 @@ bool FitSpectrum::Fit()
         c = new TCanvas("c1", "c1", 1);
     }
 
-    // Define class Multi_Gauss
-    Multi_Gauss multi_gauss(0);
+    // Define class MultiGauss
+    MultiGauss MultiGauss(0);
 
     // Start to fit
     for (int peak_index = 0; peak_index < Peak_Num; peak_index++)
     {
         // First thing to do is to establish a function with i peaks
         int peak_num_temp = peak_index + 1;
-        multi_gauss.SetNPeak(peak_num_temp);
+        MultiGauss.SetNPeak(peak_num_temp);
 
-        fit_fun_array[peak_index] = new TF1(Form("FitFun_%d", peak_index), multi_gauss, 0, 4096, 3 * peak_num_temp);
+        fit_fun_array[peak_index] = new TF1(Form("FitFun_%d", peak_index), MultiGauss, 0, 4096, 3 * peak_num_temp);
         for (int i = 0; i < 3 * peak_num_temp; i++)
         {
             // Set Limits of fit function that all parameters should be larger than 0;
