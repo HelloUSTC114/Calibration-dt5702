@@ -15,12 +15,12 @@ using namespace std;
 
 class FitSpectrum;
 
-class TFitResult: public TObject
+class TFitresult: public TObject
 {
 public:
-    TFitResult();
-    TFitResult(FitSpectrum&);
-    ~TFitResult();
+    TFitresult();
+    TFitresult(FitSpectrum&);
+    ~TFitresult();
 
     void Clear();
 
@@ -36,12 +36,12 @@ private:
     Double_t *fArrDev;    //[fPeakNum-1]
 
 
-    ClassDef(TFitResult,1);
+    ClassDef(TFitresult,1);
 };
 
 class FitSpectrum
 {
-    friend class TFitResult;
+    friend class TFitresult;
 public:
     FitSpectrum(){}
     FitSpectrum(TH1F *H, int PeakNum):h(H),Peak_Num(PeakNum){}

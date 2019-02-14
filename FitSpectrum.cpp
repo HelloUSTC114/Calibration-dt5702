@@ -1,6 +1,6 @@
 #include "FitSpectrum.h"
 
-ClassImp(TFitResult);
+ClassImp(TFitresult);
 
 double First_Peak_Start_Point = 50;
 double First_Peak_Mean_Start_Limit = 180;
@@ -195,11 +195,11 @@ bool FitSpectrum::Write(TDirectory * dir)
     h_back -> Write();
     h_copy -> Write();
 
-    // TFitResult temp(*this);
+    // TFitresult temp(*this);
     return true;
 }
 
-TFitResult::TFitResult()
+TFitresult::TFitresult()
 {
     fPeakNum = 0;
     fArrPeak = 0;
@@ -207,7 +207,7 @@ TFitResult::TFitResult()
     fArrDev = 0;
 }
 
-TFitResult::TFitResult(FitSpectrum& Fit)
+TFitresult::TFitresult(FitSpectrum& Fit)
 {
     if(!Fit.fFitFlag)
     {
@@ -224,7 +224,7 @@ TFitResult::TFitResult(FitSpectrum& Fit)
     Refresh(Fit);
 }
 
-void TFitResult::Clear()
+void TFitresult::Clear()
 {
     if(fArrPeak)
         delete[] fArrPeak;
@@ -238,7 +238,7 @@ void TFitResult::Clear()
     fPeakNum = 0;
 }
 
-bool TFitResult::Reset(FitSpectrum& Fit)
+bool TFitresult::Reset(FitSpectrum& Fit)
 {
     if(!Fit.fFitFlag)
     {
@@ -254,7 +254,7 @@ bool TFitResult::Reset(FitSpectrum& Fit)
     return true;
 }
 
-void TFitResult::Refresh(FitSpectrum& Fit)
+void TFitresult::Refresh(FitSpectrum& Fit)
 {
     auto fun_temp = Fit.fit_fun_array[Fit.Peak_Num - 1];
     if(!fun_temp)
@@ -281,12 +281,12 @@ void TFitResult::Refresh(FitSpectrum& Fit)
 
 }
 
-TFitResult::~TFitResult()
+TFitresult::~TFitresult()
 {
     Clear();
 }
 
-void TFitResult::Print()
+void TFitresult::Print()
 {
     cout << "NPeak:\t" << fPeakNum << endl;
     cout << "Peak:\t" << "Pos\t" << "Dev\t" << endl;
@@ -299,7 +299,7 @@ void TFitResult::Print()
     }
 }
 
-double TFitResult::GetGain()
+double TFitresult::GetGain()
 {
     double average = 0;
     for(int i = 0; i < fPeakNum-1; i++)

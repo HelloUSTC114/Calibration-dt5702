@@ -14,12 +14,12 @@ int main()
     GetOneByOne HistManager;
     FitSpectrum fit_spe;
     FitPedestal fit_ped;
-    TFitResult result;
+    TFitresult result;
 
     TADCInfo ADCInfo;
 
 
-    for(int i = 2; i < 5; i++)
+    for(int i = 0; i < 32; i++)
     {
         auto h = HistManager.GetSPEHist(i);
         fit_spe.Reset(h, 5);
@@ -31,10 +31,11 @@ int main()
         fit_ped.Reset(h_ped);
         double ped = fit_ped.FitPed();
 
-        cout << ADCInfo.SetGain(i,gain) << endl;
+        ADCInfo.SetGain(i,gain);
+        ADCInfo.SetPed(i,ped);
     }
     auto file = new TFile("ADCInfo.root", "recreate");
     ADCInfo.Write();
     file -> Close();
-
+    delete file;
 }
