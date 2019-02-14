@@ -7,7 +7,7 @@ class TChannelInfo;
 class TADCInfo;
 class TOpticInfo;
 
-class TADCInfo: public TObject
+class TADCInfo//: public TObject
 {
 public:
     TADCInfo() = default;

@@ -17,7 +17,7 @@ Excutable = test
 
 
 $(SHARELIB): $(OBJ) $(HEADER) TestDict.cxx
-	`root-config --cxx`	-fPIC	-shared	-o	$@	$(OBJ)	`root-config --cflags --libs` -lSpectrum
+	`root-config --cxx`	-fPIC	-shared	-o	$@	$(OBJ) TestDict.cxx	`root-config --cflags --libs` -lSpectrum
 
 %.o: %.cpp %.h
 	`root-config --cxx `	-o	$@	-c	$<	`root-config --cflags`	-fPIC

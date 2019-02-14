@@ -10,7 +10,7 @@
 #include "TObject.h"
 
 #include "Multi_Gauss.h"
-#include "Read_Spectrum.cpp"
+// #include "Read_Spectrum.cpp"
 using namespace std;
 
 class FitSpectrum;
