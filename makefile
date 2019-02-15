@@ -13,7 +13,7 @@ SHARE = FitSpe
 DICTCXX = TestDict.cxx
 LINKDEF = LinkDef.h
 
-Excutable = test
+Excutable = test FitOne
 
 
 $(SHARELIB): $(OBJ) $(HEADER) TestDict.cxx
@@ -35,5 +35,8 @@ distclean:
 
 test:  test.cpp $(SHARELIB)
 	`root-config --cxx `	-o	$@	$<	-L.	-l$(SHARE)	`root-config --cflags --libs`
+FitOne:	FitOne.cpp $(SHARELIB)
+	`root-config --cxx `	-o	$@	$<	-L.	-l$(SHARE)	`root-config --cflags --libs`
+
 
 all: $(Excutable)

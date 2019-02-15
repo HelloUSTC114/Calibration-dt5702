@@ -1,2 +1,5 @@
 *.root
 Data
+*.o
+*.so
+*.pcm
