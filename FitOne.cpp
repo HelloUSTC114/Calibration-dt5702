@@ -16,10 +16,10 @@ int main(int argc, char **argv)
 
     auto file = new TFile(argv[1]);
 
-    auto h = (TH1F*)file -> Get("h3");
+    auto h = (TH1F*)file -> Get(argv[2]);
     if(h)
     {
-        fit_spe.Reset(h, 3);
+        fit_spe.Reset(h, 4);
         fit_spe.Fit();
         result.Reset(fit_spe);
         result.Print();

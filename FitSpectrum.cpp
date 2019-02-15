@@ -3,9 +3,9 @@
 ClassImp(TFitresult);
 
 double First_Peak_Start_Point = 350;
-double First_Peak_Mean_Start_Limit = 400;
-double First_Peak_Mean_End_Limit = 450;
-double Gain_Guess = 50;
+double First_Peak_Mean_Start_Limit = 450;
+double First_Peak_Mean_End_Limit = 600;
+double Gain_Guess = 100;
 
 FitSpectrum::~FitSpectrum()
 {
